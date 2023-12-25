@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthContollerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +18,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware(("localistion"))->group(function () {
+    Route::post("login",[AuthContollerController::class,"login"]);
+    Route::apiResources([
+        "users" => UserController::class
+    ]);
 });
