@@ -5,31 +5,31 @@ namespace App\Traits;
 trait ApiResponse
 {
 
-    function success_resposnes($result, $cood = 200, $message = "Succssuful")
+    function success_resposnes($result, $code = 200, $message = "Succssuful")
     {
         return response()->json(
 
             data: [
                 "status" => true,
-                "code" => $cood,
+                "code" => $code,
                 "message" => __($message),
                 "data" => $result
             ],
-            status: $cood
+            status: $code
         );
     }
 
-    function fiald_resposnes($result=null,$cood = 404, $message = "Failed")
+    function fiald_resposnes($result=null,$code = 404, $message = "Failed")
     {
         return response()->json(
 
             data: [
                 "status" => false,
-                "code" => $cood,
+                "code" => $code,
                 "message" => __($message),
                 "data" => $result
             ],
-            status: $cood
+            status: $code
         );
     }
 }

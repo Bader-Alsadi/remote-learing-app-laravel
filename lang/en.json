@@ -1,5 +1,7 @@
-
 {
-    "Succssuful" : "The opretion succssedd",
-    "Failed" : "The opretion Failed"
+    "Succssuful": "The opretion succssedd",
+    "Failed": "The opretion Failed",
+    "Not_found": "Not found",
+    "Password wrong": "password wrong"
+
 }

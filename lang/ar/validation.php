@@ -5,7 +5,7 @@ return [
 
     'required' => 'حقل :attribute مطلوب.',
     'regex' => 'صيغة :attributeغير صحيحه.',
-    'exists' => 'القيمة المدخلة :attribute غير صحيحة.',
+    'exists' => 'القيمة المدخلة :attribute غير موجودة.',
     'unique' => ':attribute لا يجب ان يتكرر.',
 
 

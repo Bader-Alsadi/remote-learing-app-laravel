@@ -6,11 +6,16 @@ use App\Models\User;
 use App\Traits\ApiResponse;
 use Database\Factories\UserFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     use ApiResponse;
+    public function __construct()
+    {
+        $this->middleware(['role:Admin']);
+    }
     public function index(Request $request)
     {
         $users = User::all();
@@ -27,8 +32,9 @@ class UserController extends Controller
 
             return $this->fiald_resposnes(result: $validtion->errors());
         }
-        $request["password"] = bcrypt($request->password);
+        $request["password"] = Hash::make($request->password);
         $user = User::create($request->all());
+        $user->assignRole("admin");
         return $this->success_resposnes($user);
     }
 

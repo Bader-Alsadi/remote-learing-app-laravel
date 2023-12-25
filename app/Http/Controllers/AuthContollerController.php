@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -19,22 +21,26 @@ class AuthContollerController extends Controller
 
         $validtion = $this->rules($request);
         if ($validtion->fails()) {
-            return $this->fiald_resposnes(result: $validtion->errors());
+            return $this->fiald_resposnes(result: $validtion->errors(),code:300);
         }
         $user = User::whereEmail($request->email)->first();
-
-        if (Hash::check($request->password, $user->password)) {
-            $user->tooken = $user->createToken('token-api')->plainTextToken;
-            return $this->success_resposnes($user);
+        if (is_null($user)) {
+            return $this->fiald_resposnes(message: "Not_found");
         }
-        return $this->success_resposnes($user);
+        if (!Hash::check($request->password, $user->password)) {
+            return $this->fiald_resposnes(message: "Password wrong");
+        }
+        $user->token = $user->createToken('token-api')->plainTextToken;
+        return $this->success_resposnes(new UserResource($user));
     }
+
+    
 
     public function rules(Request $request)
     {
 
         return Validator::make($request->all(), [
-            "email"  => ["required", "exists:users,email"],
+            "email"  => ["required", "email", "exists:users,email"],
             "password"  => ["required"]
         ]);
     }
