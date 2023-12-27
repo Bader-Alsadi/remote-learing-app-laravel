@@ -21,7 +21,7 @@ class AuthContollerController extends Controller
 
         $validtion = $this->rules($request);
         if ($validtion->fails()) {
-            return $this->fiald_resposnes(result: $validtion->errors(),code:300);
+            return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
         $user = User::whereEmail($request->email)->first();
         if (is_null($user)) {
@@ -31,10 +31,17 @@ class AuthContollerController extends Controller
             return $this->fiald_resposnes(message: "Password wrong");
         }
         $user->token = $user->createToken('token-api')->plainTextToken;
+        if ($user->hasRole("Admin")){
+        $user->role_type="Admin";
+        } elseif ($user->hasRole("Instructor")){
+            $user->role_type="Instructor";
+        }elseif  ($user->hasRole("Student")) {
+            $user->role_type="Student";
+        }
         return $this->success_resposnes(new UserResource($user));
     }
 
-    
+
 
     public function rules(Request $request)
     {

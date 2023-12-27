@@ -19,8 +19,11 @@ trait ApiResponse
         );
     }
 
-    function fiald_resposnes($result=null,$code = 404, $message = "Failed")
+    function fiald_resposnes($result = null, $code = 404, $message = "Failed")
     {
+        if($code==300){
+            $message = $result->first();
+        }
         return response()->json(
 
             data: [

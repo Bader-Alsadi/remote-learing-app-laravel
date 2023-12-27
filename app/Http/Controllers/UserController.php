@@ -14,7 +14,7 @@ class UserController extends Controller
     use ApiResponse;
     public function __construct()
     {
-        $this->middleware(['role:Admin']);
+        // $this->middleware(['role:Admin']);
     }
     public function index(Request $request)
     {
@@ -34,7 +34,7 @@ class UserController extends Controller
         }
         $request["password"] = Hash::make($request->password);
         $user = User::create($request->all());
-        $user->assignRole("admin");
+        $user->assignRole("Instructor");
         return $this->success_resposnes($user);
     }
 
