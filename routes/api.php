@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\AuthContollerController;
 use App\Http\Controllers\UserController;
+use App\Models\Department;
+use App\Models\DepartmentDetile;
+use App\Models\Enrollment;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware(("localistion"))->group(function () {
-    Route::post("login",[AuthContollerController::class,"login"]);
+    Route::post("login", [AuthContollerController::class, "login"]);
     Route::apiResources([
-        "users" => UserController::class
+        "users" => UserController::class,
+        "departments" => Department::class,
+        "DepartmentDetiles" => DepartmentDetile::class,
+        "Enrollments" => Enrollment::class,
+        "Subjects" => Subject::class,
     ]);
 });

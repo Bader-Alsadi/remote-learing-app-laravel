@@ -30,7 +30,7 @@ class UserController extends Controller
 
         if ($validtion->fails()) {
 
-            return $this->fiald_resposnes(result: $validtion->errors());
+            return $this->fiald_resposnes(result: $validtion->errors(),code:300);
         }
         $request["password"] = Hash::make($request->password);
         $user = User::create($request->all());
