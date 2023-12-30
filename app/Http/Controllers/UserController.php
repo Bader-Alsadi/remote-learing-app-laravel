@@ -57,9 +57,9 @@ class UserController extends Controller
         if (is_null($user)) {
             return  $this->fiald_resposnes();
         }
-        if (!$user->hasRole("Instructor")) {
-            return  $this->fiald_resposnes(message: "Insturctor-premition");
-        }
+        // if (!$user->hasRole("Instructor")) {
+        //     return  $this->fiald_resposnes(message: "Insturctor-premition");
+        // }
         return $this->success_resposnes(new InstructorResource($user));
     }
 

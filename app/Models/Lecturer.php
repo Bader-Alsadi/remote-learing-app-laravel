@@ -28,4 +28,14 @@ class Lecturer extends Model
     {
         return $this->hasMany(Material::class);
     }
+
+    /**
+     * Get the enrollment that owns the Lecturer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function enrollment()
+    {
+        return $this->belongsTo(Enrollment::class);
+    }
 }

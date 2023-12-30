@@ -48,5 +48,14 @@ class Enrollment extends Model
         return $this->belongsTo(DepartmentDetile::class,"department_detile_id","id");
     }
 
+    /**
+     * Get all of the comments for the Enrollment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function lecturers()
+    {
+        return $this->hasMany(Lecturer::class);
+    }
 
 }

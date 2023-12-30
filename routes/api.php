@@ -6,6 +6,7 @@ use App\Http\Controllers\DepartmentDetileController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
@@ -41,6 +42,7 @@ Route::middleware(("localistion"))->group(function () {
         "enrollments" => EnrollmentController::class,
         "subjects" => SubjectController::class,
         "matirels" => MaterialController::class,
-        "lecturers" => LecturerController::class,
+        "enrollments.lecturers" => LecturerController::class,
+        "departmentDetiles.students" => StudentController::class,
     ]);
 });
