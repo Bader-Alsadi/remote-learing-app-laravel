@@ -6,7 +6,6 @@ use App\Models\Department;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 class DepartmentController extends Controller
 {
@@ -105,7 +104,7 @@ class DepartmentController extends Controller
 
         return Validator::make($request->all(), [
             // "name.ar" => ["required", 'regex:/^[ء-ي ]+$/u'],
-            "name" => ['required', 'regex:/^[a-zA-Z ]+$/'],
+            "name" => ['required', 'regex:/^[a-zA-Z0-9 ]+$/'],
         ]);
     }
 }

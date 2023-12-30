@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -40,8 +40,18 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        
+
         'name' => 'array',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get all of the comments for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subjects()
+    {
+        return $this->hasMany(Enrollment::class,);
+    }
 }

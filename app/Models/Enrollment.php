@@ -35,7 +35,7 @@ class Enrollment extends Model
      */
     public function subject()
     {
-        return $this->belongsTo(Subject::class,);
+        return $this->belongsTo(Subject::class);
     }
 
       /**
@@ -45,7 +45,7 @@ class Enrollment extends Model
      */
     public function deparmentDetils()
     {
-        return $this->belongsTo(DepartmentDetile::class,);
+        return $this->belongsTo(DepartmentDetile::class,"department_detile_id","id");
     }
 
 

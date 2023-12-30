@@ -2,5 +2,6 @@
     "Succssuful": "تمت العملية بنجاح",
     "Failed": "العملية فشلت",
     "Not_found":"غير موجود",
-    "Password wrong": "كلمة السر خطا"
+    "Password wrong": "كلمة السر خطا",
+    "Insturctor-premition": "لا تملك صلاحيات المعلم"
 }

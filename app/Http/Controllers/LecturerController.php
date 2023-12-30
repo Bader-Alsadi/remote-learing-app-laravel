@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subject;
+use App\Models\Lecturer;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
-class SubjectController extends Controller
+class LecturerController extends Controller
 {
     use ApiResponse;
     /**
@@ -18,7 +17,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $users = Subject::all();
+        $users = Lecturer::all();
 
         return $this->success_resposnes($users);
     }
@@ -36,24 +35,25 @@ class SubjectController extends Controller
         if($validtion->fails()){
             return $this->fiald_resposnes(result: $validtion->errors(),code:300);
         }
-        $result = Subject::create($request->all());
-        if(is_null($result)){
+        $department = Lecturer::create($request->all());
+        if(is_null($department)){
             return $this->fiald_resposnes();
 
         }
 
-        return  $this->success_resposnes($result);
+        return  $this->success_resposnes($department);
+        
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Subject  $subject
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
     public function show(int $id)
     {
-        $resulte = Subject::find($id);
+        $resulte = Lecturer::find($id);
         if(is_null($resulte)){
             return $this->fiald_resposnes();
         }
@@ -64,7 +64,7 @@ class SubjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Subject  $subject
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, int $id)
@@ -74,37 +74,40 @@ class SubjectController extends Controller
         if($validtion->fails()){
             return $this->fiald_resposnes(result: $validtion->errors(),code:300);
         }
-        $result = Subject::find($id);
+        $result = Lecturer::find($id);
         if(is_null($result)){
             return $this->fiald_resposnes();
         }
         $result->update($request->all());
         return $this->success_resposnes($result);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Subject  $subject
+     * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)
     {
-        $result = Subject::find($id);
+        $result = Lecturer::find($id);
         if(is_null($result)){
             return $this->fiald_resposnes();
         }
         $result->delete();
         return $this->success_resposnes($result);
     }
-    
+
     public function rules(Request $request)
     {
-        $update = explode('.', Route::currentRouteName()) == 'update';
+
         return Validator::make($request->all(), [
-            "name" => $update? "" : ["required"],
-            "houre" => [$update? "" : "required" ,"numeric"],
-            "grade" => [$update? "" : "required" ,"numeric","max:100"]
+            // "name.ar" => ["required", 'regex:/^[ء-ي ]+$/u'],
+            "title" => ['required', 'regex:/^[a-zA-Z0-9 ]+$/'],
+            "description" => ['required',],
+            "lecturer_data" => ['required'],
+            "enrollment_id" => ['required']
         ]);
     }
 }

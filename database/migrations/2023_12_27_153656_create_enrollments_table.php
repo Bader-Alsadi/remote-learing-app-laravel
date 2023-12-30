@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
             $table->foreignId("department_detile_id")->references("id")->on("department_detiles")->onDelete("cascade");
-            $table->foreignId("subjetc_id")->references("id")->on("subjects")->onDelete("cascade");
+            $table->foreignId("subject_id")->references("id")->on("subjects")->onDelete("cascade");
             $table->foreignId("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->unique([
-                "subjetc_id","user_id"]);
+                "subject_id","user_id"]);
                 $table->unique([
-                    "subjetc_id","department_detile_id"]);
+                    "subject_id","department_detile_id"]);
             $table->string("year");
             $table->string("scientific_method");
             $table->timestamps();

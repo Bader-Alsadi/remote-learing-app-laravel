@@ -148,13 +148,13 @@ class DatabaseSeeder extends Seeder
                 "end_date" => "2020-02-20"
             ],
             [
-                "department_id" => 1,
+                "department_id" => 2,
                 "semester" => "semester 2",
                 "Level" => "level 1",
                 "strat_date" => "2020-01-20",
                 "end_date" => "2020-02-20"
             ],  [
-                "department_id" => 1,
+                "department_id" => 3,
                 "semester" => "semester 1",
                 "Level" => "level 2",
                 "strat_date" => "2020-01-20",
@@ -169,21 +169,22 @@ class DatabaseSeeder extends Seeder
         $enrollment = [
             [
                 "department_detile_id" => 1,
-                "subjetc_id" => 1,
-                "user_id" => 5,
+                "subject_id" => 1,
+                "user_id" => 7,
                 "year" => "2020",
                 "scientific_method" => "esay c++"
             ],
+            
             [
-                "department_detile_id" => 1,
-                "subjetc_id" => 2,
-                "user_id" => 5,
+                "department_detile_id" => 2,
+                "subject_id" => 2,
+                "user_id" => 7,
                 "year" => "2020",
                 "scientific_method" => "esay c++"
             ],   [
                 "department_detile_id" => 1,
-                "subjetc_id" => 3,
-                "user_id" => 5,
+                "subject_id" => 3,
+                "user_id" => 7,
                 "year" => "2020",
                 "scientific_method" => "esay c++"
             ],

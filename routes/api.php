@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthContollerController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DepartmentDetileController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
 use App\Models\DepartmentDetile;
@@ -26,11 +32,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware(("localistion"))->group(function () {
     Route::post("login", [AuthContollerController::class, "login"]);
+    Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
+    
     Route::apiResources([
         "users" => UserController::class,
-        "departments" => Department::class,
-        "DepartmentDetiles" => DepartmentDetile::class,
-        "Enrollments" => Enrollment::class,
-        "Subjects" => Subject::class,
+        "departments" => DepartmentController::class,
+        "departmentDetiles" => DepartmentDetileController::class,
+        "enrollments" => EnrollmentController::class,
+        "subjects" => SubjectController::class,
+        "matirels" => MaterialController::class,
+        "lecturers" => LecturerController::class,
     ]);
 });

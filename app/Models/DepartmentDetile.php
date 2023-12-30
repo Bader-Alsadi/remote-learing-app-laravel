@@ -18,6 +18,10 @@ class DepartmentDetile extends Model
         "end_date"
     ];
 
+    protected $casts = [
+        "level" => "string"
+    ];
+
 
 
     /**

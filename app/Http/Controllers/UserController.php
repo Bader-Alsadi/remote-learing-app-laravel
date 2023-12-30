@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\InstructorResource;
+use App\Http\Resources\UserResource;
+use App\Models\Enrollment;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Database\Factories\UserFactory;
@@ -30,7 +33,7 @@ class UserController extends Controller
 
         if ($validtion->fails()) {
 
-            return $this->fiald_resposnes(result: $validtion->errors(),code:300);
+            return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
         $request["password"] = Hash::make($request->password);
         $user = User::create($request->all());
@@ -48,6 +51,17 @@ class UserController extends Controller
         return $this->success_resposnes($user);
     }
 
+    public function instructorInfo(int $id)
+    {
+        $user = User::with('subjects', 'subjects.subject', 'subjects.deparmentDetils.department')->find($id);
+        if (is_null($user)) {
+            return  $this->fiald_resposnes();
+        }
+        if (!$user->hasRole("Instructor")) {
+            return  $this->fiald_resposnes(message: "Insturctor-premition");
+        }
+        return $this->success_resposnes(new InstructorResource($user));
+    }
 
 
     public function rules(Request $request)

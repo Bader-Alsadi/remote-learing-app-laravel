@@ -13,8 +13,15 @@ class Subject extends Model
     [
         "name",
         "description",
-        "hours",
+        "houre",
         "grade",
+    ];
+
+
+    protected $casts =  [
+       
+        "houre" =>"integer",
+        "grade" => "decimal:1",
     ];
 
 }

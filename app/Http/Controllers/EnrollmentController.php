@@ -96,6 +96,10 @@ class EnrollmentController extends Controller
         return $this->success_resposnes($result);
     }
 
+    public function instructorInfo (int $id){
+        
+    }
+
     public function rules(Request $request)
     {
 

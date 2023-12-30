@@ -2,6 +2,7 @@
     "Succssuful": "The opretion succssedd",
     "Failed": "The opretion Failed",
     "Not_found": "Not found",
-    "Password wrong": "password wrong"
-
+    "Password wrong": "password wrong",
+    "Insturctor-premition": "you dont have Insrtuctor role"
 }
+
