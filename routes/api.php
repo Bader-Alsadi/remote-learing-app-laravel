@@ -27,22 +27,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-Route::middleware(("localistion"))->group(function () {
+
+Route::middleware('localistion')->group(function () {
+    Route::middleware('auth:sanctum')->group( function () {
+        Route::get("logout", [AuthContollerController::class, "logout"]);
+        Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
+
+        Route::apiResources([
+            "users" => UserController::class,
+            "departments" => DepartmentController::class,
+            "departmentDetiles" => DepartmentDetileController::class,
+            "enrollments" => EnrollmentController::class,
+            "subjects" => SubjectController::class,
+            "lecturers.materials" => MaterialController::class,
+            "enrollments.lecturers" => LecturerController::class,
+            "departmentDetiles.students" => StudentController::class,
+        ]);
+    });
     Route::post("login", [AuthContollerController::class, "login"]);
-    Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
-    
-    Route::apiResources([
-        "users" => UserController::class,
-        "departments" => DepartmentController::class,
-        "departmentDetiles" => DepartmentDetileController::class,
-        "enrollments" => EnrollmentController::class,
-        "subjects" => SubjectController::class,
-        "matirels" => MaterialController::class,
-        "enrollments.lecturers" => LecturerController::class,
-        "departmentDetiles.students" => StudentController::class,
-    ]);
 });

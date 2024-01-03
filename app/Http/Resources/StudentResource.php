@@ -14,7 +14,7 @@ class StudentResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
+        return parent::toArray($request);
         $subjects = [];
         foreach ($this->subjects as $item) {
             array_push($subjects, array(

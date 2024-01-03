@@ -7,6 +7,7 @@ use App\Models\Enrollment;
 use App\Models\Lecturer;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 class LecturerController extends Controller
@@ -40,7 +41,11 @@ class LecturerController extends Controller
         if ($validtion->fails()) {
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
-        $request["lecturer_data"] = date('Y-m-d H:i:s', strtotime($request->lecturer_data));
+        $department = Enrollment::find($request->enrollment_id);
+        if (is_null($department)) {
+            return $this->fiald_resposnes("not_found");
+        }
+        $request["lecturer_data"] = date('Y-m-d', strtotime($request->lecturer_data));
         $department = Lecturer::create($request->all());
         if (is_null($department)) {
             return $this->fiald_resposnes();
@@ -71,17 +76,23 @@ class LecturerController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $enrollmentId, int $lecturerID)
     {
         $validtion = $this->rules($request);
 
         if ($validtion->fails()) {
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
-        $result = Lecturer::find($id);
+
+        $result = Enrollment::find($enrollmentId);
         if (is_null($result)) {
-            return $this->fiald_resposnes();
+            return $this->fiald_resposnes("not_found");
         }
+        $result = Lecturer::find($lecturerID);
+        if (is_null($result)) {
+            return $this->fiald_resposnes("not_found");
+        }
+
         $result->update($request->all());
         return $this->success_resposnes($result);
     }
@@ -92,25 +103,34 @@ class LecturerController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(int $enrollmentId, int $lecturerID)
     {
-        $result = Lecturer::find($id);
+
+
+        $result = Enrollment::find($enrollmentId);
         if (is_null($result)) {
-            return $this->fiald_resposnes();
+            return $this->fiald_resposnes("not_found");
         }
+        $result = Lecturer::find($lecturerID);
+        if (is_null($result)) {
+            return $this->fiald_resposnes("not_found");
+        }
+
         $result->delete();
         return $this->success_resposnes($result);
     }
 
     public function rules(Request $request)
     {
+        $update = explode('.', Route::currentRouteName())[2] == 'update';
+
 
         return Validator::make($request->all(), [
             // "name.ar" => ["required", 'regex:/^[ء-ي ]+$/u'],
-            "title" => ['required', 'regex:/^[a-zA-Z0-9 ]+$/'],
-            "description" => ['required',],
-            "lecturer_data" => ['required'],
-            "enrollment_id" => ['required']
+            "title" => [$update ? '' : "required", 'regex:/^[a-zA-Z0-9 ]+$/'],
+            "description" => $update ? "" : ['required'],
+            "lecturer_data" => $update ? "" : ['required'],
+            "enrollment_id" => $update ? "" : ['required'],
         ]);
     }
 }

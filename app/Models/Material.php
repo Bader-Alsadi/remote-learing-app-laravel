@@ -18,6 +18,10 @@ class Material extends Model
         "path"
     ];
 
+    function getPathAttribute() {
+        return env('APP_URL').':8000/storage/'.substr($this->attributes['path'],7);
+    }
+
 
     /**
      * Get the user that owns the Material

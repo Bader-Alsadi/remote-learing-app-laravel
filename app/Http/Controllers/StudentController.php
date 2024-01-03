@@ -9,6 +9,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use function PHPUnit\Framework\isEmpty;
+
 class StudentController extends Controller
 {
     use ApiResponse;
@@ -19,9 +21,12 @@ class StudentController extends Controller
      */
     public function index(int $id)
     {
-        $result = DepartmentDetile::with("subjects.subject","department")->find($id);
+        $result = DepartmentDetile::with("subjects.subject", "department")->find($id);
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
+        }
+        if (count($result->subjects) == 0) {
+            return $this->fiald_resposnes("empty");
         }
 
         return $this->success_resposnes(new StudentResource($result));
@@ -41,12 +46,11 @@ class StudentController extends Controller
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
         $result = Student::create($request->all());
-        if(is_null($result)){
+        if (is_null($result)) {
             return $this->fiald_resposnes();
         }
 
         return $this->success_resposnes($result);
-
     }
 
     /**
