@@ -53,7 +53,7 @@ class MaterialController extends Controller
             if (is_null($strogePath)) {
                 return $this->fiald_resposnes("path_not_storge");
             } else {
-                $request["size"] = $request->file('file')->getSize() / 1024;
+                $request["size"] = $request->file('file')->getSize() / (1024 * 1024);
                 $request["madia_type"] = $request->file('file')->getClientOriginalExtension();
                 $request["path"] = $strogePath;
                 $material = Material::create($request->except("file"));
@@ -151,7 +151,7 @@ class MaterialController extends Controller
             "title" => [$update ? '' : "required", 'regex:/^[a-zA-Z0-9 ]+$/'],
             "type" => $update ? "" : ['required'],
             "lecturer_id" => $update ? "" : ['required'],
-            "file" => $update ? "" : ['required', "mimes:jpg,jpeg,png,pdf,xls,doc,docm,docx,dot,pptx,rar,zip,txt"],
+            "file" => $update ? "" : ['required', "mimes:jpg,jpeg,png,pdf,xls,doc,docm,docx,dot,pptx,rar,zip,txt,mp4,webm"],
         ]);
     }
 }
