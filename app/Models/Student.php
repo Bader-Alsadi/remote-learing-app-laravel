@@ -33,4 +33,14 @@ class Student extends Model
     {
         return $this->belongsTo(DepartmentDetile::class,"department_detile_id");
     }
+
+    /**
+     * Get all of the comments for the Student
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function submissins()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }

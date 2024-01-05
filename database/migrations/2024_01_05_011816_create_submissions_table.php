@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime("submissions_date");
             $table->string("path");
             $table->double("grade")->nullable();
+            $table->boolean("state")->default(false);
             $table->timestamps();
         });
     }

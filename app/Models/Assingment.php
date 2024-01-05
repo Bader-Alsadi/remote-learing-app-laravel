@@ -18,4 +18,14 @@ class Assingment extends Model
         "deadline",
         
     ];
+
+    /**
+     * Get all of the comments for the Assingment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }
