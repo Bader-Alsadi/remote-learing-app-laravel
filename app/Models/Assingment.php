@@ -16,5 +16,6 @@ class Assingment extends Model
         "grade",
         "enrollment_id",
         "deadline",
+        
     ];
 }

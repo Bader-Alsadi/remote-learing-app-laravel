@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssingmentController;
 use App\Http\Controllers\AuthContollerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentDetileController;
@@ -42,6 +43,7 @@ Route::middleware('localistion')->group(function () {
             "subjects" => SubjectController::class,
             "lecturers.materials" => MaterialController::class,
             "enrollments.lecturers" => LecturerController::class,
+            "enrollments.assingments" => AssingmentController::class,
             "departmentDetiles.students" => StudentController::class,
         ]);
     });

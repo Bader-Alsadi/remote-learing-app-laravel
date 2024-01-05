@@ -58,4 +58,14 @@ class Enrollment extends Model
         return $this->hasMany(Lecturer::class);
     }
 
+    /**
+     * Get all of the comments for the Enrollment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function assingments()
+    {
+        return $this->hasMany(Assingment::class);
+    }
+
 }
