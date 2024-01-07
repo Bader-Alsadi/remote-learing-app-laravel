@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AssingmentResource;
 use App\Models\Assingment;
 use App\Models\Enrollment;
 use App\Traits\ApiResponse;
@@ -28,7 +29,7 @@ class AssingmentController extends Controller
             return $this->fiald_resposnes(message: "empty");
         }
 
-        return $this->success_resposnes($result);
+        return $this->success_resposnes(new AssingmentResource($result));
     }
 
     /**
@@ -50,7 +51,7 @@ class AssingmentController extends Controller
             return $this->fiald_resposnes("not_found");
         }
         $request["enrollment_id"] = $id;
-        $request["deadline"] = Carbon::createFromFormat("d/m/Y h:m:s", $request->deadline);
+        $request["deadline"] = Carbon::createFromFormat("Y-m-d H:i:s", $request->deadline);
         $result = Assingment::create($request->all());
         if (is_null($result)) {
             return $this->fiald_resposnes();
@@ -77,9 +78,25 @@ class AssingmentController extends Controller
      * @param  \App\Models\Assingment  $assingment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Assingment $assingment)
+    public function update(Request $request, int $assingmentID)
     {
-        //
+        $validtion = $this->rules($request);
+
+        if ($validtion->fails()) {
+            return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
+        }
+
+        $result = Enrollment::find($request->enrollment_id);
+        if (is_null($result)) {
+            return $this->fiald_resposnes("not_found");
+        }
+        $result = Assingment::find($assingmentID);
+        if (is_null($result)) {
+            return $this->fiald_resposnes("not_found");
+        }
+
+        $result->update($request->all());
+        return $this->success_resposnes($result);
     }
 
     /**
@@ -88,14 +105,26 @@ class AssingmentController extends Controller
      * @param  \App\Models\Assingment  $assingment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Assingment $assingment)
+    public function destroy(int $enrollmentId, int $assingmetID)
     {
-        //
+
+
+        $result = Enrollment::find($enrollmentId);
+        if (is_null($result)) {
+            return $this->fiald_resposnes("not_found");
+        }
+        $result = Assingment::find($assingmetID);
+        if (is_null($result)) {
+            return $this->fiald_resposnes("not_found");
+        }
+
+        $result->delete();
+        return $this->success_resposnes($result);
     }
 
     public function rules(Request $request)
     {
-        $update = explode('.', Route::currentRouteName())[2] == 'update';
+        $update =  Route::currentRouteName() == 'updateAssingment';
 
 
         return Validator::make($request->all(), [
@@ -103,7 +132,8 @@ class AssingmentController extends Controller
             "title" => [$update ? '' : "required", 'regex:/^[a-zA-Z0-9 ]+$/'],
             "description" => $update ? "" : ['required'],
             "deadline" => $update ? "" : ['required'],
-            "grade" => $update ? "" : ['required', "numeric"],
+            "grade" => $update ? "" : ['required', "numeric", "max:100", "min:0"],
+            "enrollment_id" => ['required', "exists:enrollments,id"],
         ]);
     }
 }
