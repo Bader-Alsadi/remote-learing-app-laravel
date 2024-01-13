@@ -28,7 +28,7 @@ class Enrollment extends Model
         return $this->belongsTo(User::class,);
     }
 
-      /**
+    /**
      * Get the teacher that owns the Enrollment
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -38,14 +38,14 @@ class Enrollment extends Model
         return $this->belongsTo(Subject::class);
     }
 
-      /**
+    /**
      * Get the teacher that owns the Enrollment
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function deparmentDetils()
     {
-        return $this->belongsTo(DepartmentDetile::class,"department_detile_id","id");
+        return $this->belongsTo(DepartmentDetile::class, "department_detile_id", "id");
     }
 
     /**
@@ -68,4 +68,5 @@ class Enrollment extends Model
         return $this->hasMany(Assingment::class);
     }
 
+ 
 }

@@ -6,6 +6,7 @@ use App\Http\Resources\MaterialResource;
 use App\Models\Lecturer;
 use App\Models\Material;
 use App\Traits\ApiResponse;
+use App\Traits\UpLoadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class MaterialController extends Controller
 {
     use ApiResponse;
+    use UpLoadImage;
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +51,7 @@ class MaterialController extends Controller
             return $this->fiald_resposnes("path_not_found");
         } else {
 
-            $strogePath = $this->uploadeFile($request->file("file"), $lecturer->title);
+            $strogePath = $this->uploadeFile($request->file("file"), $lecturer->title, $lecturer->id);
             if (is_null($strogePath)) {
                 return $this->fiald_resposnes("path_not_storge");
             } else {
@@ -66,14 +68,7 @@ class MaterialController extends Controller
         }
     }
 
-    protected function uploadeFile($file, $leactrerName)
-    {
-        $file_name = time() . 'file.' . $file->getClientOriginalExtension();
-        $path = 'public/files/matrerials/' . $leactrerName;
-        $stored_path = $file->storeAs($path, $file_name);
 
-        return $stored_path;
-    }
 
     /**
      * Display the specified resource.

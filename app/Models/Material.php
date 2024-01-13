@@ -18,8 +18,11 @@ class Material extends Model
         "path"
     ];
 
-    function getPathAttribute() {
-        return env('APP_URL').':8000/storage/'.substr($this->attributes['path'],7);
+    protected $casts = ["size" => "double", "lecturer_id" => "integer"];
+
+    function getPathAttribute()
+    {
+        return env('APP_URL') . ':8000/storage/' . substr($this->attributes['path'], 7);
     }
 
 

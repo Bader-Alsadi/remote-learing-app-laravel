@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-
 class AssingmentController extends Controller
 {
     use ApiResponse;
@@ -45,19 +44,32 @@ class AssingmentController extends Controller
         if ($validtion->fails()) {
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
-
-        $result = Enrollment::with("assingments")->find($id);
+        // App\Models\Enrollment::with("subject")->find(1);
+        $result = Enrollment::with("assingments", "subject")->find($id);
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
+        if ($result->subject->grade < ($request->grade + $this->sumAllGrades($result))) {
+            return $this->fiald_resposnes("the subject is than the sum of all grade");
+        }
         $request["enrollment_id"] = $id;
-        $request["deadline"] = Carbon::createFromFormat("Y-m-d H:i:s", $request->deadline);
+        $request["deadline"] = Carbon::createFromFormat("Y-m-d", $request->deadline);
         $result = Assingment::create($request->all());
         if (is_null($result)) {
             return $this->fiald_resposnes();
         }
 
         return $this->success_resposnes($result);
+    }
+
+    public function sumAllGrades($result)
+    {
+        $total = 0;
+        foreach ($result->assingments as $item) {
+            $total += $item->grade;
+        }
+
+        return $total;
     }
 
     /**
@@ -131,7 +143,7 @@ class AssingmentController extends Controller
             // "name.ar" => ["required", 'regex:/^[ء-ي ]+$/u'],
             "title" => [$update ? '' : "required", 'regex:/^[a-zA-Z0-9 ]+$/'],
             "description" => $update ? "" : ['required'],
-            "deadline" => $update ? "" : ['required'],
+            "deadline" => $update ? "" : ['required', "after_or_equal:today"],
             "grade" => $update ? "" : ['required', "numeric", "max:100", "min:0"],
             "enrollment_id" => ['required', "exists:enrollments,id"],
         ]);

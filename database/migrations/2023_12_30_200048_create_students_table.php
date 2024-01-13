@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->foreignId("department_detile_id")->references("id")->on("department_detiles")->onDelete("cascade");
+            $table->unique(["user_id","department_detile_id"]);
             $table->timestamps();
         });
     }

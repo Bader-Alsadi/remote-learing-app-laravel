@@ -63,6 +63,18 @@ class UserController extends Controller
         return $this->success_resposnes(new InstructorResource($user));
     }
 
+    public function studentInfo(int $id)
+    {
+        $user = User::with('subjects', 'subjects.subject', 'subjects.deparmentDetils.department')->find($id);
+        if (is_null($user)) {
+            return  $this->fiald_resposnes();
+        }
+        // if (!$user->hasRole("Instructor")) {
+        //     return  $this->fiald_resposnes(message: "Insturctor-premition");
+        // }
+        return $this->success_resposnes(new InstructorResource($user));
+    }
+
 
     public function rules(Request $request)
     {

@@ -14,7 +14,7 @@ class StudentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
         $subjects = [];
         foreach ($this->subjects as $item) {
             array_push($subjects, array(
@@ -24,21 +24,32 @@ class StudentResource extends JsonResource
                 "houre" => $item->subject->houre,
                 "grade" => $item->subject->grade,
                 "year" => $item->year,
-                "scientific_method" => $item->scientific_method
+                "scientific_method" => $item->scientific_method,
+                "department" => array(
+                    "id" => $item->deparmentdetils->department_id,
+                    "name" => $item->deparmentdetils->department->name,
+                    "level" => $item->deparmentdetils->Level,
+                    "semaster" => array(
+                        "name" => $item->deparmentdetils->semester,
+                        "strat_date" => $item->deparmentdetils->strat_date,
+                        "end_date" => $item->deparmentdetils->end_date
+                    ),)
                
 
             ));
         }
-        return array("department" => array(
-            "id" => $item->deparmentdetils->department_id,
-            "name" => $item->deparmentdetils->department->name,
-            "level" => $item->deparmentdetils->Level,
-            "semaster" => array(
-                "name" => $item->deparmentdetils->semester,
-                "strat_date" => $item->deparmentdetils->strat_date,
-                "end_date" => $item->deparmentdetils->end_date
-            ),
-            "subjects" => $subjects,
-        ));
+
+        return $subjects;
+        // return array("department" => array(
+        //     "id" => $item->deparmentdetils->department_id,
+        //     "name" => $item->deparmentdetils->department->name,
+        //     "level" => $item->deparmentdetils->Level,
+        //     "semaster" => array(
+        //         "name" => $item->deparmentdetils->semester,
+        //         "strat_date" => $item->deparmentdetils->strat_date,
+        //         "end_date" => $item->deparmentdetils->end_date
+        //     ),
+        //     "subjects" => $subjects,
+        // ));
     }
 }

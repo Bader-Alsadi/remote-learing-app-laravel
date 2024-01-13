@@ -17,6 +17,8 @@ class Lecturer extends Model
         "enrollment_id"
     ];
 
+    protected $casts = ["enrollment_id" => "integer"];
+
 
 
     /**

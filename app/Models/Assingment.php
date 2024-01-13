@@ -16,8 +16,10 @@ class Assingment extends Model
         "grade",
         "enrollment_id",
         "deadline",
-        
+
     ];
+
+    protected $casts = ["grade" => "integer", "enrollment_id" => "integer"];
 
     /**
      * Get all of the comments for the Assingment
@@ -28,4 +30,19 @@ class Assingment extends Model
     {
         return $this->hasMany(Submission::class);
     }
+
+    /**
+     * Get the user that owns the Assingment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function subject()
+    {
+        return $this->belongsTo(Enrollment::class, 'enrollment_id', 'id');
+    }
+
+    // Enrollment::with("assingments.subject")
+    // App\Models\Assignment::with('subject');
+    // App\Models\Assingment::all();
+    // pp\Models\Assignment::all();
 }

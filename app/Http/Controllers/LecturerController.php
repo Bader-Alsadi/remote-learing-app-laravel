@@ -6,6 +6,7 @@ use App\Http\Resources\LectuerResource;
 use App\Models\Enrollment;
 use App\Models\Lecturer;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -45,7 +46,8 @@ class LecturerController extends Controller
         if (is_null($department)) {
             return $this->fiald_resposnes("not_found");
         }
-        $request["lecturer_data"] = date('Y-m-d', strtotime($request->lecturer_data));
+        $request["lecturer_data"] = Carbon::createFromFormat("Y-m-d", $request->lecturer_data);
+        // date('Y-m-d', strtotime($request->lecturer_data));
         $department = Lecturer::create($request->all());
         if (is_null($department)) {
             return $this->fiald_resposnes();
@@ -76,7 +78,7 @@ class LecturerController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $enrollmentId, int $lecturerID)
+    public function update(Request $request, int $lecturerID)
     {
         $validtion = $this->rules($request);
 
@@ -84,7 +86,7 @@ class LecturerController extends Controller
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
 
-        $result = Enrollment::find($enrollmentId);
+        $result = Enrollment::find($request->enrollment_id);
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
@@ -122,15 +124,15 @@ class LecturerController extends Controller
 
     public function rules(Request $request)
     {
-        $update = explode('.', Route::currentRouteName())[2] == 'update';
+        $update =  Route::currentRouteName() == 'updateLecturer';
 
 
         return Validator::make($request->all(), [
             // "name.ar" => ["required", 'regex:/^[ء-ي ]+$/u'],
             "title" => [$update ? '' : "required", 'regex:/^[a-zA-Z0-9 ]+$/'],
             "description" => $update ? "" : ['required'],
-            "lecturer_data" => $update ? "" : ['required'],
-            "enrollment_id" => $update ? "" : ['required'],
+            "lecturer_data" => $update ? "" : ['required',],
+            "enrollment_id" => ['required', "exists:enrollments,id"],
         ]);
     }
 }

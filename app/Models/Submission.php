@@ -19,7 +19,12 @@ class Submission extends Model
         "grade",
     ];
 
-    protected $casts = ["state"=>"boolean"];
+    protected $casts = ["state" => "boolean", "grade" => "double"];
+
+    function getPathAttribute()
+    {
+        return env('APP_URL') . ':8000/storage/' . substr($this->attributes['path'], 7);
+    }
 
     /**
      * Get the student that owns the Submission

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SubmissionResouce;
 use App\Models\Assingment;
 use App\Models\Submission;
 use App\Traits\ApiResponse;
@@ -21,13 +22,13 @@ class SubmissionController extends Controller
      */
     public function index(int $id)
     {
-        $result = Assingment::with("submissions")->find($id);
+        $result = Assingment::with("submissions.student.user")->find($id);
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
 
-
-        return $this->success_resposnes($result);
+        // $result["student_name"] = $result->submissions->student->user->name[app()->getLocale()];
+        return $this->success_resposnes(new SubmissionResouce($result));
     }
 
     /**
@@ -92,14 +93,24 @@ class SubmissionController extends Controller
      * @param  \App\Models\Submission  $submission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $id, int $submissionId)
+    public function update(Request $request, int $submissionId)
     {
         $validtion = $this->rules($request);
 
         if ($validtion->fails()) {
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
-        $submission = Submission::find($submissionId);
+
+        $submission = Submission::with("assingment")->find($submissionId);
+        if ($submission->assingment->grade < $request->grade) {
+            return $this->fiald_resposnes(message: "grade is grater then the grade that assing to this assingment");
+        }
+        $submission = tap($submission->update($request->only('grade')));
+        if (is_null($submission)) {
+            return $this->fiald_resposnes("file_not_found");
+        }
+
+        return $this->success_resposnes($submission);
     }
 
     /**
@@ -115,12 +126,13 @@ class SubmissionController extends Controller
 
     public function rules(Request $request)
     {
-        $update = explode('.', Route::currentRouteName())[2] == 'update';
+        $update = Route::currentRouteName() == 'update';
 
 
         return Validator::make($request->all(), [
             "student_id" =>  ['required', "exists:students,id"],
             "assingment_id" => $update ? ['required', "exists:assingments,id"] : "",
+            "grade" => ["numeric", "max:100", "min:0"],
             "file" => $update ? "" : ['required', "mimes:jpg,jpeg,png,pdf,xls,doc,docm,docx,dot,pptx,rar,zip,txt"],
         ]);
     }

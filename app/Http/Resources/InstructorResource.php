@@ -25,10 +25,11 @@ class InstructorResource extends JsonResource
                 "houre" => $item->subject->houre,
                 "grade" => $item->subject->grade,
                 "year" => $item->year,
+                "image" => $item->subject->image,
                 "scientific_method" => $item->scientific_method,
                 "department" => array(
                     "id" => $item->deparmentdetils->department_id,
-                    "name"=>$item->deparmentdetils->department->name,
+                    "name" => $item->deparmentdetils->department->name,
                     "level" => $item->deparmentdetils->Level,
                     "semaster" => array(
                         "name" => $item->deparmentdetils->semester,
@@ -39,11 +40,6 @@ class InstructorResource extends JsonResource
 
             ));
         }
-        return [
-            "id" => $this->id,
-            "name" => $this->name[app()->getLocale()],
-            "email" => $this->email,
-            "subjects" => $subjects,
-        ];
+        return $subjects;
     }
 }

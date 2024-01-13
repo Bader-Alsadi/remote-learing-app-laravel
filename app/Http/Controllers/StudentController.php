@@ -21,7 +21,12 @@ class StudentController extends Controller
      */
     public function index(int $id)
     {
-        $result = DepartmentDetile::with("subjects.subject", "department")->find($id);
+        $studen = Student::where("user_id", $id)->first();
+        if (is_null($studen)) {
+            return $this->fiald_resposnes("not_found");
+        }
+
+        $result = DepartmentDetile::with("subjects.subject", "department")->find($studen->department_detile_id);
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }

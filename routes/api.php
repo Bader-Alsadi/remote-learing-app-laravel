@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssingmentController;
+use App\Http\Controllers\AuthContoller;
 use App\Http\Controllers\AuthContollerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentDetileController;
@@ -32,10 +33,13 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('localistion')->group(function () {
-    Route::middleware('auth:sanctum')->group( function () {
-        Route::get("logout", [AuthContollerController::class, "logout"]);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get("logout", [AuthContoller::class, "logout"]);
         Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
-
+        Route::post("updategrade/{id}", [SubmissionController::class, "update"])->name("update");
+        Route::post("updatelecturer/{id}", [LecturerController::class, "update"])->name("updateLecturer");
+        Route::post("updateAssingment/{id}", [AssingmentController::class, "update"])->name("updateAssingment");
+        Route::post("updateSubject/{id}", [SubjectController::class, "update"])->name("updateSubject");
         Route::apiResources([
             "users" => UserController::class,
             "departments" => DepartmentController::class,
@@ -49,5 +53,5 @@ Route::middleware('localistion')->group(function () {
             "departmentDetiles.students" => StudentController::class,
         ]);
     });
-    Route::post("login", [AuthContollerController::class, "login"]);
+    Route::post("login", [AuthContoller::class, "login"]);
 });
