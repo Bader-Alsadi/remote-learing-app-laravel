@@ -39,6 +39,7 @@ class DepartmentDetile extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    
     public function students()
     {
         return $this->hasMany(Student::class, 'department_detile_id');

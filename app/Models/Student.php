@@ -44,4 +44,14 @@ class Student extends Model
     {
         return $this->hasMany(Submission::class);
     }
+
+    /**
+     * Get all of the grades for the Student
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }

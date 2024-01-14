@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthContollerController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DepartmentDetileController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\StudentController;
@@ -41,6 +42,7 @@ Route::middleware('localistion')->group(function () {
         Route::post("updatelecturer/{id}", [LecturerController::class, "update"])->name("updateLecturer");
         Route::post("updateAssingment/{id}", [AssingmentController::class, "update"])->name("updateAssingment");
         Route::post("updateSubject/{id}", [SubjectController::class, "update"])->name("updateSubject");
+        Route::post("updategrade", [GradeController::class, "updateGrade"])->name("updateGrade");
         Route::apiResources([
             "users" => UserController::class,
             "departments" => DepartmentController::class,
@@ -52,6 +54,7 @@ Route::middleware('localistion')->group(function () {
             "enrollments.assingments" => AssingmentController::class,
             "assingments.submissions" => SubmissionController::class,
             "departmentDetiles.students" => StudentController::class,
+            "students.grades" => GradeController::class,
         ]);
     });
     Route::post("login", [AuthContoller::class, "login"]);
