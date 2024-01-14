@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId("student_id")->references("id")->on("students")->onDelete("cascade");
             $table->foreignId("enrollment_id")->references("id")->on("enrollments")->onDelete("cascade");
-            $table->double("final_mark");
+            $table->unique(["enrollment_id", "student_id"]);
+            $table->double("final_mark")->nullable();
             $table->timestamps();
         });
     }
