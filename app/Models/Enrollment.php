@@ -68,5 +68,13 @@ class Enrollment extends Model
         return $this->hasMany(Assingment::class);
     }
 
- 
+    /**
+     * Get all of the grades for the Enrollment
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }

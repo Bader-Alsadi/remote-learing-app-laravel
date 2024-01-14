@@ -18,6 +18,7 @@ class Subject extends Model
         "image",
     ];
 
+
     function getImageAttribute()
     {
         return env('APP_URL') . ':8000/storage/' . substr($this->attributes['image'], 7);
@@ -27,6 +28,6 @@ class Subject extends Model
     protected $casts =  [
 
         "houre" => "integer",
-        "grade" => "decimal:1",
+        "grade" => "double",
     ];
 }

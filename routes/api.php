@@ -37,7 +37,7 @@ Route::middleware('localistion')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get("logout", [AuthContoller::class, "logout"]);
         Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
-        Route::get("students/{id}", [EnrollmentController::class, "students"]);
+        Route::get("students/{id}", [StudentController::class, "studentSubjects"]);
         Route::post("updategrade/{id}", [SubmissionController::class, "update"])->name("update");
         Route::post("updatelecturer/{id}", [LecturerController::class, "update"])->name("updateLecturer");
         Route::post("updateAssingment/{id}", [AssingmentController::class, "update"])->name("updateAssingment");

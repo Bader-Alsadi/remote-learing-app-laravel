@@ -8,17 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model
 
 {
-    use HasFactory; 
+    use HasFactory;
     protected $fillable = ["student_id", "enrollment_id", "final_mark"];
-    
+    protected $caste = ["final_mark" => "double"];
+
+
     /**
-     * Get all of the Grades for the Grade
+     * Get the subject that owns the Grade
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function Grades()
+    public function subject()
     {
-        return $this->hasMany(Grade::class);
+        return $this->belongsTo(Enrollment::class, "enrollment_id");
     }
 
+    /**
+     * Get the student that owns the Grade
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }

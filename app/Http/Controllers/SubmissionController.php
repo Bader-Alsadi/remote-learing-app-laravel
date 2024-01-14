@@ -146,6 +146,7 @@ class SubmissionController extends Controller
     {
         $total = 0;
         foreach ($result as $item) {
+            
             $total += $item->grade;
         }
 

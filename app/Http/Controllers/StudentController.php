@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\showStudentone;
 use App\Http\Resources\StudentResource;
 use App\Models\DepartmentDetile;
 use App\Models\Grade;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-use function PHPUnit\Framework\isEmpty;
+use function PHPSTORM_META\map;
 
 class StudentController extends Controller
 {
@@ -21,14 +23,14 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $id)
+    public function index(int $id,)
     {
-        $studen = Student::where("user_id", $id)->first();
-        if (is_null($studen)) {
+        $department = DepartmentDetile::find($id);
+        if (is_null($department)) {
             return $this->fiald_resposnes("not_found");
         }
 
-        $result = DepartmentDetile::with("subjects.subject", "department")->find($studen->department_detile_id);
+        $result = DepartmentDetile::with("subjects.subject", "department")->find($id);
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
@@ -37,6 +39,23 @@ class StudentController extends Controller
         }
 
         return $this->success_resposnes(new StudentResource($result));
+    }
+
+    public function studentSubjects(int $id)
+    {
+        $student = Student::with("grades.subject.subject")->find($id);
+        if (is_null($student)) {
+            return $this->fiald_resposnes("not_found");
+        }
+        // $result = DepartmentDetile::with("subjects.subject", "department")->find($student->department_detile_id);
+        if (is_null($student)) {
+            return $this->fiald_resposnes("not_found");
+        }
+        // if (count($result->subjects) == 0) {
+        //     return $this->fiald_resposnes("empty");
+        // }
+        return $this->success_resposnes($student);
+        // return $this->success_resposnes(new StudentResource($result));
     }
 
     /**
@@ -81,9 +100,13 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student)
+    public function show(int $department_id, int $subject_id)
     {
-        //
+        $result = Student::find($subject_id);
+        if (is_null($result)) {
+            return $this->fiald_resposnes(message: "not_found");
+        }
+        return $this->success_resposnes(new showStudentone($result));
     }
 
     /**
@@ -124,7 +147,7 @@ class StudentController extends Controller
     {
 
         return Validator::make($request->all(), [
-            "user_id" => ['required', "exists:users,id", "unique:users,id"],
+            "user_id" => ['required', "exists:users,id", "unique:students,user_id"],
             "department_detile_id" => ['required', "exists:department_detiles,id"],
         ]);
     }

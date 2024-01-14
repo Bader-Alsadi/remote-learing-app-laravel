@@ -100,16 +100,16 @@ class EnrollmentController extends Controller
 
 
 
-    public function students(int $id)
-    {
+    // public function students(int $id)
+    // {
 
-        $result = Enrollment::with("deparmentDetils.students.user")->find($id);
-        if (is_null($result)) {
-            return $this->fiald_resposnes();
-        }
+    //     $result = Enrollment::with("deparmentDetils.students.user")->find($id);
+    //     if (is_null($result)) {
+    //         return $this->fiald_resposnes();
+    //     }
 
-        return $this->success_resposnes(new ShowStudentResource($result));
-    }
+    //     return $this->success_resposnes(new ShowStudentResource($result));
+    // }
 
     public function rules(Request $request)
     {
