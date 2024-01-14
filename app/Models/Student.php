@@ -9,9 +9,10 @@ class Student extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         "user_id",
-        "department_detile_id"
+        "department_detile_id",
+        "mark"
     ];
 
     /**
@@ -21,7 +22,7 @@ class Student extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "user_id", "id");
     }
 
     /**
@@ -31,7 +32,7 @@ class Student extends Model
      */
     public function department()
     {
-        return $this->belongsTo(DepartmentDetile::class,"department_detile_id");
+        return $this->belongsTo(DepartmentDetile::class, "department_detile_id");
     }
 
     /**

@@ -76,9 +76,15 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, int $id)
     {
-        //
+        $student = Student::find($id);
+        $student = $student->update($request);
+        if (!$student) {
+            return $this->fiald_resposnes("mark_not_update" . $student);
+        }
+
+        return $this->success_resposnes($student);
     }
 
     /**

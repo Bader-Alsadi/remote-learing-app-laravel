@@ -34,7 +34,7 @@ class AuthContoller extends Controller
         }
         $user->token = $user->createToken('token-api')->plainTextToken;
         $user->role_type = $user->roles->first()->name;
-         if ($user->hasRole("Student")) {
+        if ($user->hasRole("Student")) {
             $student = Student::with("department")->whereUserId($user->id)->first();
             $user->student = $student;
         }

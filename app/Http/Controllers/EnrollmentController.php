@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ShowStudentResource;
 use App\Models\Enrollment;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -96,8 +97,18 @@ class EnrollmentController extends Controller
         return $this->success_resposnes($result);
     }
 
-    public function instructorInfo (int $id){
-        
+
+
+
+    public function students(int $id)
+    {
+
+        $result = Enrollment::with("deparmentDetils.students.user")->find($id);
+        if (is_null($result)) {
+            return $this->fiald_resposnes();
+        }
+
+        return $this->success_resposnes(new ShowStudentResource($result));
     }
 
     public function rules(Request $request)

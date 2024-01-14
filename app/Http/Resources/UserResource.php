@@ -21,9 +21,9 @@ class UserResource extends JsonResource
             "token" => $this->token,
             "role_type" => $this->role_type,
         );
-        if ($this->role_type =="Student") {
+        if ($this->role_type == "Student") {
             $deparment = $this->student->department;
-
+            $user["student_id"] = $this->student->id;
             $user["deparment_id"] = $deparment->id;
             $user["department"] = $deparment->department->name;
             $user["level"] = $deparment->Level;
