@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StudentResource;
 use App\Models\DepartmentDetile;
+use App\Models\Grade;
 use App\Models\Student;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use function PHPUnit\Framework\isEmpty;
@@ -50,12 +52,27 @@ class StudentController extends Controller
         if ($validtion->fails()) {
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
+        DB::beginTransaction();
         $result = Student::create($request->all());
         if (is_null($result)) {
+            DB::commit();
             return $this->fiald_resposnes();
         }
-
+        $this->addGrades($result);
+        DB::commit();
         return $this->success_resposnes($result);
+    }
+
+    protected function addGrades($result)
+    {
+        $subjects = DepartmentDetile::find($result->department_detile_id)->subjects;
+        foreach ($subjects as $subject) {
+            $student = new Request();
+            $student["student_id"] = $result->id;
+            $student["enrollment_id"] = $subject->id;
+            $addGrade = new GradeController();
+            $addGrade->store($student);
+        }
     }
 
     /**
@@ -93,17 +110,22 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Student $student)
+    public function destroy(int $department_id, int $student_id)
     {
-        //
+        $result = Student::find($student_id);
+        if (is_null($result)) {
+            return $this->fiald_resposnes();
+        }
+        $result->delete();
+        return $this->success_resposnes($result);
     }
 
     public function rules(Request $request)
     {
 
         return Validator::make($request->all(), [
-            // "user_id" => ['required',"exists:users"],
-            // "department_detile_id" => ['required',"exists:department_detiles"],
+            "user_id" => ['required', "exists:users,id", "unique:users,id"],
+            "department_detile_id" => ['required', "exists:department_detiles,id"],
         ]);
     }
 }
