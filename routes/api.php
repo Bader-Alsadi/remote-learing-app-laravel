@@ -39,6 +39,7 @@ Route::get('srotge', function () {
 
 Route::get('cach', function () {
     Artisan::call('route:cache');
+
 });
 Route::middleware('localistion')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {

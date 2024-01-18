@@ -37,7 +37,7 @@ class UserController extends Controller
         }
         $request["password"] = Hash::make($request->password);
         $user = User::create($request->all());
-        $user->assignRole("Instructor");
+        $user->assignRole("Student");
         return $this->success_resposnes($user);
     }
 

@@ -16,45 +16,45 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $permission_list = [
-        // ['name' => 'show-roles-list'],
-        // ['name' => 'show-roles'],
-        // ['name' => 'create-roles'],
-        // ['name' => 'edit-roles'],
-        // ['name' => 'delete-roles'],
-        // ['name' => 'show-users-list'],
-        // ['name' => 'show-users'],
-        // ['name' => 'create-users'],
-        // ['name' => 'edit-users'],
-        // ['name' => 'delete-users'],
-        // ['name' => 'show-courses-list'],
-        // ['name' => 'show-courses'],
-        // ['name' => 'create-courses'],
-        // ['name' => 'edit-courses'],
-        // ['name' => 'delete-courses'],
-        // ['name' => 'show-instructors-list'],
-        // ['name' => 'show-instructors'],
-        // ['name' => 'create-instructors'],
-        // ['name' => 'edit-instructors'],
-        // ['name' => 'delete-instructors'],
-        // ['name' => 'show-students-list'],
-        // ['name' => 'show-students'],
-        // ['name' => 'create-students'],
-        // ['name' => 'edit-students'],
-        // ['name' => 'delete-students'],
-        // ['name' => 'send-notifiction'],
-        // ['name' => 'upload-material'],
-        // ['name' => 'download-material'],
-        // ['name' => 'edit-material'],
-        // ['name' => 'upload-assignment'],
-        // ['name' => 'downlode-assignment'],
-        // ['name' => 'edit-assignment'],
-        // ['name' => 'add-grade'],
-        // ['name' => 'edit-grade'],
-        // ['name' => 'delete-grade'],
-        // ['name' => 'make-report'],
+        $permission_list = [
+        ['name' => 'show-roles-list'],
+        ['name' => 'show-roles'],
+        ['name' => 'create-roles'],
+        ['name' => 'edit-roles'],
+        ['name' => 'delete-roles'],
+        ['name' => 'show-users-list'],
+        ['name' => 'show-users'],
+        ['name' => 'create-users'],
+        ['name' => 'edit-users'],
+        ['name' => 'delete-users'],
+        ['name' => 'show-courses-list'],
+        ['name' => 'show-courses'],
+        ['name' => 'create-courses'],
+        ['name' => 'edit-courses'],
+        ['name' => 'delete-courses'],
+        ['name' => 'show-instructors-list'],
+        ['name' => 'show-instructors'],
+        ['name' => 'create-instructors'],
+        ['name' => 'edit-instructors'],
+        ['name' => 'delete-instructors'],
+        ['name' => 'show-students-list'],
+        ['name' => 'show-students'],
+        ['name' => 'create-students'],
+        ['name' => 'edit-students'],
+        ['name' => 'delete-students'],
+        ['name' => 'send-notifiction'],
+        ['name' => 'upload-material'],
+        ['name' => 'download-material'],
+        ['name' => 'edit-material'],
+        ['name' => 'upload-assignment'],
+        ['name' => 'downlode-assignment'],
+        ['name' => 'edit-assignment'],
+        ['name' => 'add-grade'],
+        ['name' => 'edit-grade'],
+        ['name' => 'delete-grade'],
+        ['name' => 'make-report'],
 
-        // ];
+        ];
 
         // DB::table('permissions')->insert($permission_list);
 
@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
         //      'show-instructors',
         //      'create-instructors',
         //      'edit-instructors',
-        //      'delete-students',        
+        //      'delete-students',
         //      'delete-instructors',
         //      'show-students-list',
         //      'show-students',
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
             ["name" => "accountant"],
         ];
 
-        DB::table('departments')->insert($departments);
+        // DB::table('departments')->insert($departments);
 
         $subjects = [
             [
@@ -137,7 +137,7 @@ class DatabaseSeeder extends Seeder
 
         ];
 
-        DB::table('subjects')->insert($subjects);
+        // DB::table('subjects')->insert($subjects);
 
         $dparment_de = [
             [
@@ -164,27 +164,27 @@ class DatabaseSeeder extends Seeder
 
         ];
 
-        DB::table('department_detiles')->insert($dparment_de);
+        // DB::table('department_detiles')->insert($dparment_de);
 
         $enrollment = [
             [
                 "department_detile_id" => 1,
                 "subject_id" => 1,
-                "user_id" => 7,
+                "user_id" => 3,
                 "year" => "2020",
                 "scientific_method" => "esay c++"
             ],
-            
+
             [
                 "department_detile_id" => 2,
                 "subject_id" => 2,
-                "user_id" => 7,
+                "user_id" => 3,
                 "year" => "2020",
                 "scientific_method" => "esay c++"
             ],   [
                 "department_detile_id" => 1,
                 "subject_id" => 3,
-                "user_id" => 7,
+                "user_id" => 3,
                 "year" => "2020",
                 "scientific_method" => "esay c++"
             ],

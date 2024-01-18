@@ -103,7 +103,7 @@ class EnrollmentController extends Controller
         ->join("students","enrollments.department_detile_id","=","students.department_detile_id")
         ->join("users","users.id","=","students.user_id")
         ->join("grades","grades.student_id","=","students.id")
-        ->where("grades.enrollment_id","=",1)
+        ->where("grades.enrollment_id","=",$id)
         ->groupBy("students.id")
         ->select(
         'users.name->en as name',
