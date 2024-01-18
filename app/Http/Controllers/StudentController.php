@@ -12,6 +12,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 use function PHPSTORM_META\map;
 
@@ -143,9 +144,51 @@ class StudentController extends Controller
         return $this->success_resposnes($result);
     }
 
-    public function studentDetials (int $id){
-        // DB:table("stud")
+    public function studentinfo (Request $request){
+        $validtion = $this->rulee2($request);
 
+        if ($validtion->fails()) {
+            return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
+        }
+
+        $result= DB::table("students")
+        ->join("users","users.id","=","students.user_id")
+        ->join("department_detiles","department_detiles.id","=","students.department_detile_id")
+        ->join("enrollments","enrollments.department_detile_id","=","department_detiles.id")
+        ->join("assingments","assingments.enrollment_id","=","enrollments.id")
+        ->join("submissions","submissions.student_id","=","students.id")
+        ->where("submissions.student_id",$request->student_id)
+        ->where("enrollments.id",$request->enrollment_id)
+        ->groupBy("assingments.id")
+        ->select(
+            // "users.name->en as name",
+            "assingments.id",
+            "assingments.title",
+            "assingments.description",
+            "assingments.enrollment_id",
+            "assingments.grade",
+            "assingments.deadline",
+            "submissions.id as submission_id",
+            "submissions.student_id",
+            "submissions.submissions_date",
+            "submissions.grade",
+            "submissions.path",
+            "submissions.state",
+            "users.name->en as student_name",
+        )
+        ->get();
+
+        return $this->success_resposnes($result);
+
+
+    }
+    public function rulee2(Request $request)
+    {
+
+        return Validator::make($request->all(), [
+            "student_id" => ['required', "exists:students,id"],
+            "enrollment_id" => ['required', "exists:enrollments,id"],
+        ]);
     }
 
     public function rules(Request $request)
