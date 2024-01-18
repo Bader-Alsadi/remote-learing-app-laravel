@@ -143,6 +143,11 @@ class StudentController extends Controller
         return $this->success_resposnes($result);
     }
 
+    public function studentDetials (int $id){
+        // DB:table("stud")
+
+    }
+
     public function rules(Request $request)
     {
 
