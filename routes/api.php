@@ -19,6 +19,7 @@ use App\Models\Enrollment;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,12 +33,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::get('srotge', function () {
+    Artisan::call('storage:link');
+});
 
+Route::get('cach', function () {
+    Artisan::call('route:cache');
+});
 Route::middleware('localistion')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get("logout", [AuthContoller::class, "logout"]);
         Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
         Route::get("students/{id}", [StudentController::class, "studentSubjects"]);
+        Route::get("students_courses/{id}", [EnrollmentController::class, "enrollmentStudents"]);
         Route::post("updategrade/{id}", [SubmissionController::class, "update"])->name("update");
         Route::post("updatelecturer/{id}", [LecturerController::class, "update"])->name("updateLecturer");
         Route::post("updateAssingment/{id}", [AssingmentController::class, "update"])->name("updateAssingment");

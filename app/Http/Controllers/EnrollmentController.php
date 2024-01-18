@@ -6,8 +6,8 @@ use App\Http\Resources\ShowStudentResource;
 use App\Models\Enrollment;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
 class EnrollmentController extends Controller
 {
     use ApiResponse;
@@ -97,6 +97,21 @@ class EnrollmentController extends Controller
         return $this->success_resposnes($result);
     }
 
+    public function enrollmentStudents(int $id){
+
+        $result =  DB::table('enrollments')
+        ->join("students","enrollments.department_detile_id","=","students.department_detile_id")
+        ->join("users","users.id","=","students.user_id")
+        ->join("grades","grades.student_id","=","students.id")
+        ->where("grades.enrollment_id","=",1)
+        ->groupBy("students.id")
+        ->select(
+        'users.name->en as name',
+        'grades.final_mark'
+        )
+        ->get();
+        return $this->success_resposnes($result);
+    }
 
 
 

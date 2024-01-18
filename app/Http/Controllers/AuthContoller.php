@@ -21,10 +21,10 @@ class AuthContoller extends Controller
     public function login(Request $request)
     {
 
-        $validtion = $this->rules($request);
-        if ($validtion->fails()) {
-            return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
-        }
+        // $validtion = $this->rules($request);
+        // if ($validtion->fails()) {
+        //     return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
+        // }
         $user = User::whereEmail($request->email)->first();
         if (is_null($user)) {
             return $this->fiald_resposnes(message: "Not_found");
