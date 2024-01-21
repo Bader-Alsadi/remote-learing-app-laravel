@@ -171,7 +171,7 @@ class StudentController extends Controller
             "submissions.id as submission_id",
             "submissions.student_id",
             "submissions.submissions_date",
-            "submissions.grade",
+            "submissions.grade as submission_grade",
             "submissions.path",
             "submissions.state",
             "users.name->en as student_name",

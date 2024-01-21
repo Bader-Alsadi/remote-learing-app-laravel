@@ -29,6 +29,7 @@ class AuthContoller extends Controller
         if (is_null($user)) {
             return $this->fiald_resposnes(message: "Not_found");
         }
+        $user->update($request->only("fcm_token"));
         if (!Hash::check($request->password, $user->password)) {
             return $this->fiald_resposnes(message: "Password wrong");
         }

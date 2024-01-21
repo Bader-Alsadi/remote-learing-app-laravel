@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\InstructorResource;
 use App\Http\Resources\UserResource;
+use App\Models\AppNotivction;
 use App\Models\Enrollment;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Database\Factories\UserFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -87,8 +90,90 @@ class UserController extends Controller
         ]);
     }
 
+    public function getNotiction (int $user_id){
+
+        $result = AppNotivction::where("user_id",$user_id)->get();
+
+        return $this->success_resposnes($result) ;
+
+    }
 
 
+    public function sendPushNotification(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+
+            'title' => 'required|string',
+            'body' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
+
+        $usersFCM = [];
+
+        $xx = DB::transaction(function () use ($request, &$usersFCM) {
+            if (!$request->has('to')) {
+                $usersFCM = User::pluck('fcm_token')->toArray(); // Fetch all users' FCM tokens
+
+
+                $url = 'https://fcm.googleapis.com/fcm/send';
+                $notification = [
+                    'title' => $request->title,
+                    'body' => $request->body
+                ];
+                $arrayToSend = [
+                    'registration_ids' => $usersFCM, // Use 'registration_ids' instead of 'to' for multiple recipients
+                    'notification' => $notification
+                ];
+
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . env("FCM_SERVER_KEY")
+                ])->post($url, $arrayToSend);
+                return $this->success_resposnes($response);
+            }
+
+            // if ($request->has('to')) {
+            //     appnotification::create($request->all()); // Create app notification for all users
+            // }
+
+            $url = 'https://fcm.googleapis.com/fcm/send';
+            $notification = [
+                'title' => $request->title,
+                'body' => $request->body
+            ];
+            $arrayToSend = [
+                'registration_ids' => $request->to, // Use 'registration_ids' instead of 'to' for multiple recipients
+                'notification' => $notification
+            ];
+
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . env("FCM_SERVER_KEY")
+            ])->post($url, $arrayToSend);
+            // return $response;
+
+            $result= DB::table('users')
+            ->whereIn("fcm_token",$request->to)
+            ->get();
+            $notivect= [];
+            foreach($result as $user){
+                array_push($notivect,array(
+                    "user_id"=>$user->id,
+                    "title"=>$request->title,
+                    "body"=>$request->body
+                ));
+            }
+
+            if (!is_null($result)) {
+                AppNotivction::insert($notivect); // Create app notification for a specific user
+            }
+            return $this->success_resposnes($notivect);
+        });
+        return $xx;
+    }
 
 
 

@@ -6,13 +6,16 @@ use App\Http\Resources\AssingmentResource;
 use App\Models\Assingment;
 use App\Models\Enrollment;
 use App\Traits\ApiResponse;
+use App\Traits\NotivctionApp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 class AssingmentController extends Controller
 {
     use ApiResponse;
+    use NotivctionApp;
     /**
      * Display a listing of the resource.
      *
@@ -54,11 +57,17 @@ class AssingmentController extends Controller
         }
         $request["enrollment_id"] = $id;
         $request["deadline"] = Carbon::createFromFormat("Y-m-d", $request->deadline);
+        DB::beginTransaction();
         $result = Assingment::create($request->all());
         if (is_null($result)) {
             return $this->fiald_resposnes();
         }
-
+        $noteRequest= new Request();
+        $noteRequest["title"]= "add new assingments";
+        $noteRequest["body"]= "assingments title ".$result->title;
+        $noteRequest["to"]= $this->getStudentIds($result->enrollment_id);
+        $this->sendPushNotification($noteRequest);
+        DB::commit();
         return $this->success_resposnes($result);
     }
 
@@ -106,8 +115,14 @@ class AssingmentController extends Controller
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
-
+        DB::beginTransaction();
         $result->update($request->all());
+        $noteRequest= new Request();
+        $noteRequest["title"]= "update  assingments";
+        $noteRequest["body"]= "assingments title ".$result->title;
+        $noteRequest["to"]= $this->getStudentIds($result->enrollment_id);
+        $this->sendPushNotification($noteRequest);
+        DB::commit();
         return $this->success_resposnes($result);
     }
 
@@ -129,8 +144,14 @@ class AssingmentController extends Controller
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
-
+        DB::beginTransaction();
         $result->delete();
+        $noteRequest= new Request();
+        $noteRequest["title"]= "delete  assingments";
+        $noteRequest["body"]= "assingments title ".$result->title;
+        $noteRequest["to"]= $this->getStudentIds($result->enrollment_id);
+        $this->sendPushNotification($noteRequest);
+        DB::commit();
         return $this->success_resposnes($result);
     }
 

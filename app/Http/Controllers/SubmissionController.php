@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\SubmissionResouce;
 use App\Models\Assingment;
+use App\Models\Grade;
 use App\Models\Student;
 use App\Models\Submission;
 use App\Traits\ApiResponse;
@@ -127,26 +128,26 @@ class SubmissionController extends Controller
         if ($submission->assingment->grade < $request->grade) {
             return $this->fiald_resposnes(message: "grade is grater then the grade that assing to this assingment");
         }
-
+        $assingment_id= $submission->assingment->enrollment_id;
         $submission = tap($submission->update($request->only('grade')));
         if (is_null($submission)) {
             return $this->fiald_resposnes("file_not_found");
         }
-        $request["mark"] = $this->sumAllGrades(Student::find($request->student_id)->submissins);
-        $student = Student::find($request->student_id);
-        $student = tap($student->update($request->only("mark"))); //update the mark of the student
-        if (!$student) {
-            return $this->fiald_resposnes("mark_not_update" . $student);
+        $request["fianl_mark"] = $this->sumAllGrades(Student::find($request->student_id)->submissins);
+        $grade = Grade::where("student_id",$request->student_id)->where("enrollment_id",$assingment_id) ;
+        $grade = tap($grade->update($request->only("mark"))); //update the mark of the student
+        if (!$grade) {
+            return $this->fiald_resposnes("mark_not_update" . $grade);
         }
 
-        return $this->success_resposnes($student);
+        return $this->success_resposnes($grade);
     }
 
     public function sumAllGrades($result)
     {
         $total = 0;
         foreach ($result as $item) {
-            
+
             $total += $item->grade;
         }
 

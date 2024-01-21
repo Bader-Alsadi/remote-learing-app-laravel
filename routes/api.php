@@ -41,9 +41,11 @@ Route::get('cach', function () {
     Artisan::call('route:cache');
 
 });
+Route::get("test",[EnrollmentController::class,"test_quary"]);
 Route::middleware('localistion')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get("logout", [AuthContoller::class, "logout"]);
+        Route::get("get_notifction/{id}", [UserController::class, "getNotiction"]);
         Route::get("instructor-info/{id}", [UserController::class, "instructorInfo"]);
         Route::get("students/{id}", [StudentController::class, "studentSubjects"]);
         Route::post("student_info", [StudentController::class, "studentinfo"]);
@@ -53,6 +55,7 @@ Route::middleware('localistion')->group(function () {
         Route::post("updateAssingment/{id}", [AssingmentController::class, "update"])->name("updateAssingment");
         Route::post("updateSubject/{id}", [SubjectController::class, "update"])->name("updateSubject");
         Route::post("updategrade", [GradeController::class, "updateGrade"])->name("updateGrade");
+        Route::post("notifction", [UserController::class, "sendPushNotification"])->name("notifction");
         Route::apiResources([
             "users" => UserController::class,
             "departments" => DepartmentController::class,

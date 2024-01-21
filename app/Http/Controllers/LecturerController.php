@@ -6,14 +6,17 @@ use App\Http\Resources\LectuerResource;
 use App\Models\Enrollment;
 use App\Models\Lecturer;
 use App\Traits\ApiResponse;
+use App\Traits\NotivctionApp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 class LecturerController extends Controller
 {
     use ApiResponse;
+    use NotivctionApp;
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +41,7 @@ class LecturerController extends Controller
     public function store(Request $request)
     {
         $validtion = $this->rules($request);
-
+        DB::beginTransaction();
         if ($validtion->fails()) {
             return $this->fiald_resposnes(result: $validtion->errors(), code: 300);
         }
@@ -49,10 +52,16 @@ class LecturerController extends Controller
         $request["lecturer_data"] = Carbon::createFromFormat("Y-m-d", $request->lecturer_data);
         // date('Y-m-d', strtotime($request->lecturer_data));
         $department = Lecturer::create($request->all());
+
         if (is_null($department)) {
             return $this->fiald_resposnes();
         }
-
+        $noteRequest= new Request();
+        $noteRequest["title"]= "add new lectuser";
+        $noteRequest["body"]= "lectuser title ".$department->title;
+        $noteRequest["to"]= $this->getStudentIds($department->enrollment_id);
+        $this->sendPushNotification($noteRequest);
+        DB::commit();
         return  $this->success_resposnes($department);
     }
 
@@ -94,8 +103,14 @@ class LecturerController extends Controller
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
-
+        DB::beginTransaction();
         $result->update($request->all());
+        $noteRequest= new Request();
+        $noteRequest["title"]= "update new lectuser";
+        $noteRequest["body"]= "lectuser title ".$result->title;
+        $noteRequest["to"]= $this->getStudentIds($result->enrollment_id);
+        $this->sendPushNotification($noteRequest);
+        DB::commit();
         return $this->success_resposnes($result);
     }
 
@@ -117,8 +132,14 @@ class LecturerController extends Controller
         if (is_null($result)) {
             return $this->fiald_resposnes("not_found");
         }
-
+        DB::beginTransaction();
         $result->delete();
+        $noteRequest= new Request();
+        $noteRequest["title"]= "delete new lectuser";
+        $noteRequest["body"]= "lectuser title ".$result->title;
+        $noteRequest["to"]= $this->getStudentIds($result->enrollment_id);
+        $this->sendPushNotification($noteRequest);
+        DB::commit();
         return $this->success_resposnes($result);
     }
 

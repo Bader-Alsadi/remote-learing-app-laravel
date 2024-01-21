@@ -6,8 +6,10 @@ use App\Http\Resources\MaterialResource;
 use App\Models\Lecturer;
 use App\Models\Material;
 use App\Traits\ApiResponse;
+use App\Traits\NotivctionApp;
 use App\Traits\UpLoadImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,6 +17,7 @@ class MaterialController extends Controller
 {
     use ApiResponse;
     use UpLoadImage;
+    use NotivctionApp;
     /**
      * Display a listing of the resource.
      *
@@ -58,18 +61,21 @@ class MaterialController extends Controller
                 $request["size"] = $request->file('file')->getSize() / (1024 * 1024);
                 $request["madia_type"] = $request->file('file')->getClientOriginalExtension();
                 $request["path"] = $strogePath;
+                DB::beginTransaction();
                 $material = Material::create($request->except("file"));
                 if (is_null($material)) {
                     return $this->fiald_resposnes();
                 }
-
-                return  $this->success_resposnes($material);
+               $noteRequest= new Request();
+                $noteRequest["title"]= "add new mterial";
+                $noteRequest["body"]= "mterial title ".$material->title;
+                $noteRequest["to"]= $this->getStudentIds($lecturer->enrollment_id);
+                $this->sendPushNotification($noteRequest);
+                DB::commit();
+                return  $this->success_resposnes( $material);
             }
         }
     }
-
-
-
     /**
      * Display the specified resource.
      *

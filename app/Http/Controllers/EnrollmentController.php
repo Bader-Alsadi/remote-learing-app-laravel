@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ShowStudentResource;
+use App\Models\AppNotivction;
 use App\Models\Enrollment;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -106,6 +108,7 @@ class EnrollmentController extends Controller
         ->where("grades.enrollment_id","=",$id)
         ->groupBy("students.id")
         ->select(
+        "grades.student_id",
         'users.name->en as name',
         'grades.final_mark'
         )
@@ -113,7 +116,30 @@ class EnrollmentController extends Controller
         return $this->success_resposnes($result);
     }
 
+    public function test_quary(){
+        $result = DB::table('enrollments')
+        ->join("department_detiles","department_detiles.id","=","enrollments.department_detile_id")
+        ->join("students","students.department_detile_id","=","department_detiles.id")
+        ->join("users","students.user_id","=","users.id")
+        ->where("enrollments.id",1)
+        ->whereNotNull("users.fcm_token")
+        ->select(
+            "users.fcm_token"
+        )->get();
 
+        $result = DB::table("users")
+        // ->where("students.enrollment_id",1)
+        ->get();
+        return $result->pluck('fcm_token')->toArray();
+        return User::pluck('fcm_token')->toArray();
+        return User::where("id",10)->pluck('fcm_token')->toArray();
+
+        //////////////////////////////////////////////
+
+        // $result = AppNotivction::where("user_id",2)->get();
+
+        // return $result;
+    }
 
     // public function students(int $id)
     // {
